@@ -45,7 +45,7 @@ export function StatCard({
 }: {
   label: string;
   value: ReactNode;
-  hint?: string;
+  hint?: string | undefined;
   icon?: ReactNode;
 }) {
   return (
@@ -68,7 +68,7 @@ export function StatCard({
   );
 }
 
-export function EmptyState({ title, hint }: { title: string; hint?: string }) {
+export function EmptyState({ title, hint }: { title: string; hint?: string | undefined }) {
   return (
     <div className="rounded-lg border border-dashed py-14 text-center">
       <p className="text-sm font-medium">{title}</p>

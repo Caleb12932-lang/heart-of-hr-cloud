@@ -124,9 +124,9 @@ export function PageHeader({
   badge,
 }: {
   title: string;
-  description?: string;
-  action?: ReactNode;
-  badge?: string;
+  description?: string | undefined;
+  action?: ReactNode | undefined;
+  badge?: string | undefined;
 }) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
