@@ -16,6 +16,7 @@ import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDirectoryRouteImport } from './routes/_authenticated/directory'
 import { Route as AuthenticatedLeaveRouteImport } from './routes/_authenticated/leave'
+import { Route as AuthenticatedPayrollRouteImport } from './routes/_authenticated/payroll'
 import { Route as AuthenticatedRecruitmentRouteImport } from './routes/_authenticated/recruitment'
 
 const IndexRoute = IndexRouteImport.update({
@@ -52,6 +53,11 @@ const AuthenticatedLeaveRoute = AuthenticatedLeaveRouteImport.update({
   path: '/leave',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPayrollRoute = AuthenticatedPayrollRouteImport.update({
+  id: '/payroll',
+  path: '/payroll',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRecruitmentRoute =
   AuthenticatedRecruitmentRouteImport.update({
     id: '/recruitment',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/directory': typeof AuthenticatedDirectoryRoute
   '/leave': typeof AuthenticatedLeaveRoute
+  '/payroll': typeof AuthenticatedPayrollRoute
   '/recruitment': typeof AuthenticatedRecruitmentRoute
 }
 export interface FileRoutesByTo {
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/directory': typeof AuthenticatedDirectoryRoute
   '/leave': typeof AuthenticatedLeaveRoute
+  '/payroll': typeof AuthenticatedPayrollRoute
   '/recruitment': typeof AuthenticatedRecruitmentRoute
 }
 export interface FileRoutesById {
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/directory': typeof AuthenticatedDirectoryRoute
   '/_authenticated/leave': typeof AuthenticatedLeaveRoute
+  '/_authenticated/payroll': typeof AuthenticatedPayrollRoute
   '/_authenticated/recruitment': typeof AuthenticatedRecruitmentRoute
 }
 export interface FileRouteTypes {
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/directory'
     | '/leave'
+    | '/payroll'
     | '/recruitment'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/directory'
     | '/leave'
+    | '/payroll'
     | '/recruitment'
   id:
     | '__root__'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/directory'
     | '/_authenticated/leave'
+    | '/_authenticated/payroll'
     | '/_authenticated/recruitment'
   fileRoutesById: FileRoutesById
 }
@@ -176,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLeaveRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/payroll': {
+      id: '/_authenticated/payroll'
+      path: '/payroll'
+      fullPath: '/payroll'
+      preLoaderRoute: typeof AuthenticatedPayrollRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/recruitment': {
       id: '/_authenticated/recruitment'
       path: '/recruitment'
@@ -191,6 +210,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDirectoryRoute: typeof AuthenticatedDirectoryRoute
   AuthenticatedLeaveRoute: typeof AuthenticatedLeaveRoute
+  AuthenticatedPayrollRoute: typeof AuthenticatedPayrollRoute
   AuthenticatedRecruitmentRoute: typeof AuthenticatedRecruitmentRoute
 }
 
@@ -199,6 +219,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDirectoryRoute: AuthenticatedDirectoryRoute,
   AuthenticatedLeaveRoute: AuthenticatedLeaveRoute,
+  AuthenticatedPayrollRoute: AuthenticatedPayrollRoute,
   AuthenticatedRecruitmentRoute: AuthenticatedRecruitmentRoute,
 }
 
