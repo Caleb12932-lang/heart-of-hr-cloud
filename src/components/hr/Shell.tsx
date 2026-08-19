@@ -56,8 +56,8 @@ export function Shell({ children }: { children: ReactNode }) {
             <Building2 className="size-5 text-sidebar-primary-foreground" />
           </div>
           <div>
-            <p className="text-sm font-semibold tracking-tight">Northwind HR</p>
-            <p className="text-xs text-sidebar-foreground/60">People operations</p>
+            <p className="text-sm font-semibold tracking-tight">ZHRM</p>
+            <p className="text-xs text-sidebar-foreground/60">Human Resource Management</p>
           </div>
         </div>
 
@@ -109,7 +109,7 @@ export function Shell({ children }: { children: ReactNode }) {
           <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
             <Menu className="size-5" />
           </Button>
-          <span className="font-semibold">Northwind HR</span>
+          <span className="font-semibold">ZHRM</span>
         </header>
         <main className="min-w-0 flex-1 p-4 md:p-8">{children}</main>
       </div>

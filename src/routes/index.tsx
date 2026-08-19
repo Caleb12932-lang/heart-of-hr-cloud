@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Northwind HR — People, leave, hiring & payroll in one place" },
+      { title: "ZHRM — People, leave, hiring & payroll in one place" },
       {
         name: "description",
         content:
-          "Northwind HR brings your employee directory, leave, attendance, recruitment, payroll and performance reviews into one calm workspace.",
+          "ZHRM brings your employee directory, leave, attendance, recruitment, payroll and performance reviews into one calm workspace.",
       },
-      { property: "og:title", content: "Northwind HR — Modern HR workspace" },
+      { property: "og:title", content: "ZHRM — Modern HR workspace" },
       {
         property: "og:description",
         content:
@@ -36,7 +36,7 @@ function Landing() {
     <div className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <span className="flex items-center gap-2 font-semibold text-primary">
-          <Building2 className="size-5" /> Northwind HR
+          <Building2 className="size-5" /> ZHRM
         </span>
         <Button asChild size="sm">
           <Link to="/auth">Sign in</Link>
@@ -81,7 +81,7 @@ function Landing() {
       </main>
 
       <footer className="mx-auto max-w-6xl px-6 py-10 text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Northwind HR
+        © {new Date().getFullYear()} ZHRM
       </footer>
     </div>
   );

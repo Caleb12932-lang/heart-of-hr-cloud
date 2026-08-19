@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,13 +12,13 @@ import { Building2 } from "lucide-react";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in | Northwind HR" },
+      { title: "Sign in | ZHRM" },
       {
         name: "description",
-        content: "Sign in to Northwind HR to manage people, leave, payroll and performance.",
+        content: "Sign in to ZHRM to manage people, leave, payroll and performance.",
       },
-      { property: "og:title", content: "Sign in | Northwind HR" },
-      { property: "og:description", content: "Access your Northwind HR workspace." },
+      { property: "og:title", content: "Sign in | ZHRM" },
+      { property: "og:description", content: "Access your ZHRM workspace." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -76,22 +75,23 @@ function AuthPage() {
   }
 
   async function google() {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth`,
+      },
     });
-    if (result.error) {
-      toast.error("Google sign-in failed. Please try again.");
-      return;
+
+    if (error) {
+      toast.error(error.message);
     }
-    if (result.redirected) return;
-    navigate({ to: "/dashboard", replace: true });
   }
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="hidden flex-col justify-between p-12 text-primary-foreground lg:flex" style={{ background: "var(--gradient-brand)" }}>
         <Link to="/" className="flex items-center gap-2 text-sm font-semibold">
-          <Building2 className="size-5" /> Northwind HR
+          <Building2 className="size-5" /> ZHRM
         </Link>
         <div>
           <h2 className="max-w-md text-3xl font-semibold leading-tight tracking-tight">
