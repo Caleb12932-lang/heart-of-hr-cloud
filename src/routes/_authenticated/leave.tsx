@@ -75,7 +75,7 @@ function LeavePage() {
     mutationFn: async ({ id, status }: { id: string; status: "approved" | "rejected" }) => {
       const { error } = await supabase
         .from("leave_requests")
-        .update({ status, decided_at: new Date().toISOString() } as never)
+        .update({ status, reviewed_at: new Date().toISOString() } as never)
         .eq("id", id);
       if (error) throw new Error(error.message);
     },

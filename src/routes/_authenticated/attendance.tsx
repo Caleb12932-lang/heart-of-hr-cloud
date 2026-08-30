@@ -103,23 +103,26 @@ function AttendancePage() {
                 {todayRow ? (todayRow.clock_out ? "Day complete" : "Currently clocked in") : "Not clocked in"}
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button
-                className="flex-1"
-                disabled={Boolean(todayRow) || clock.isPending}
-                onClick={() => clock.mutate("in")}
-              >
-                <LogIn className="size-4" /> Clock in
-              </Button>
-              <Button
-                className="flex-1"
-                variant="outline"
-                disabled={!todayRow || Boolean(todayRow?.clock_out) || clock.isPending}
-                onClick={() => clock.mutate("out")}
-              >
-                <LogOut className="size-4" /> Clock out
-              </Button>
-            </div>
+            {me?.employee?.id && (
+  <div className="flex gap-2">
+    <Button
+      className="flex-1"
+      disabled={Boolean(todayRow) || clock.isPending}
+      onClick={() => clock.mutate("in")}
+    >
+      <LogIn className="size-4" /> Clock in
+    </Button>
+
+    <Button
+      className="flex-1"
+      variant="outline"
+      disabled={!todayRow || Boolean(todayRow?.clock_out) || clock.isPending}
+      onClick={() => clock.mutate("out")}
+    >
+      <LogOut className="size-4" /> Clock out
+    </Button>
+  </div>
+)}
           </CardContent>
         </Card>
 

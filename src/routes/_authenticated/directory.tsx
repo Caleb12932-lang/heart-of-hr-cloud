@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin, Search, Plus } from "lucide-react";
+import { Mail, Phone, MapPin, Search, Plus, UserMinus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { hr, initials, money, prettyDate, titleCase } from "@/lib/hr";
 import { useMe } from "@/hooks/useMe";
@@ -38,6 +38,7 @@ function Directory() {
   const [search, setSearch] = useState("");
   const [dept, setDept] = useState("all");
   const [open, setOpen] = useState(false);
+  const [removeEmployee, setRemoveEmployee] = useState<any>(null);
 
   const employees = useQuery({ queryKey: ["employees"], queryFn: hr.employees });
   const departments = useQuery({ queryKey: ["departments"], queryFn: hr.departments });
@@ -66,6 +67,26 @@ function Directory() {
       qc.invalidateQueries({ queryKey: ["employees"] });
     },
     onError: (e: Error) => toast.error(e.message),
+  });
+
+  const removeFromDepartment = useMutation({
+    mutationFn: async (employeeId: string) => {
+      const { error } = await supabase
+        .from("employees")
+        .update({ department_id: null })
+        .eq("id", employeeId);
+
+      if (error) throw new Error(error.message);
+    },
+
+    onSuccess: () => {
+      toast.success("Employee removed from department");
+      qc.invalidateQueries({ queryKey: ["employees"] });
+    },
+
+    onError: (e: Error) => {
+      toast.error(e.message);
+    },
   });
 
   const deptName = (id: string | null) =>
@@ -231,11 +252,28 @@ function Directory() {
                     <MapPin className="size-3.5" /> {e.location ?? "Remote"}
                   </p>
                 </div>
-                <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-t pt-3 text-xs text-muted-foreground">
-                  <span>{deptName(e.department_id)}</span>
-                  <span>Joined {prettyDate(e.hire_date)}</span>
-                  {(me?.isHr || me?.employee?.id === e.id) && e.salary != null && (
-                    <span className="font-medium text-foreground">{money(e.salary)}/yr</span>
+                <div className="mt-4 border-t pt-3">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                    <span>{deptName(e.department_id)}</span>
+                    <span>Joined {prettyDate(e.hire_date)}</span>
+
+                    {(me?.isHr || me?.employee?.id === e.id) && e.salary != null && (
+                      <span className="font-medium text-foreground">
+                        {money(e.salary)}/yr
+                      </span>
+                    )}
+                  </div>
+
+                  {me?.isHr && e.department_id && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-3"
+                      onClick={() => setRemoveEmployee(e)}
+                    >
+                      <UserMinus className="mr-2 size-4" />
+                      Remove from department
+                    </Button>
                   )}
                 </div>
               </CardContent>
@@ -243,6 +281,57 @@ function Directory() {
           ))}
         </div>
       )}
+      <Dialog
+        open={!!removeEmployee}
+        onOpenChange={(value) => {
+          if (!value) setRemoveEmployee(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Remove from department?</DialogTitle>
+          </DialogHeader>
+
+          <div className="text-sm text-muted-foreground">
+            {removeEmployee && (
+              <p>
+                <strong className="text-foreground">
+                  {removeEmployee.full_name}
+                </strong>{" "}
+                will remain an active employee but will no longer be assigned
+                to{" "}
+                <strong className="text-foreground">
+                  {deptName(removeEmployee.department_id)}
+                </strong>
+                .
+              </p>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setRemoveEmployee(null)}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              variant="destructive"
+              disabled={removeFromDepartment.isPending}
+              onClick={() => {
+                if (removeEmployee) {
+                  removeFromDepartment.mutate(removeEmployee.id);
+                }
+              }}
+            >
+              {removeFromDepartment.isPending
+                ? "Removing..."
+                : "Remove from department"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

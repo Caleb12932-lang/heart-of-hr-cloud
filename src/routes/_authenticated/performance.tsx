@@ -93,9 +93,9 @@ function Performance() {
       const { error } = await supabase.from("reviews").insert({
         employee_id: get("employee_id"),
         reviewer_id: me?.employee?.id ?? null,
-        cycle: get("cycle"),
+        period: get("cycle"),
         rating: Number(get("rating")),
-        summary: get("summary") || null,
+        strengths: get("summary") || null,
         status: "submitted",
       } as never);
       if (error) throw new Error(error.message);
@@ -110,8 +110,8 @@ function Performance() {
 
   const avgRating = reviewList.length
     ? Math.round(
-        (reviewList.reduce((s, r) => s + Number(r.rating ?? 0), 0) / reviewList.length) * 10,
-      ) / 10
+      (reviewList.reduce((s, r) => s + Number(r.rating ?? 0), 0) / reviewList.length) * 10,
+    ) / 10
     : 0;
 
   return (
@@ -313,7 +313,7 @@ function Performance() {
                       <div>
                         <p className="font-medium">{r.employee?.full_name ?? "—"}</p>
                         <p className="text-xs text-muted-foreground">
-                          {r.cycle} · {r.employee?.job_title ?? "Role not set"}
+                          {r.period} · {r.employee?.job_title ?? "Role not set"}
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
@@ -321,8 +321,8 @@ function Performance() {
                         <StatusBadge status={titleCase(r.status)} />
                       </div>
                     </div>
-                    {r.summary && (
-                      <p className="mt-3 text-sm text-muted-foreground">{r.summary}</p>
+                    {r.strengths && (
+                      <p className="mt-3 text-sm text-muted-foreground">{r.strengths}</p>
                     )}
                   </CardContent>
                 </Card>

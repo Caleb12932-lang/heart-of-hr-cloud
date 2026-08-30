@@ -34,9 +34,9 @@ export function initials(name: string) {
 
 export function money(value: number | null | undefined) {
   if (value == null) return "—";
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-KE", {
     style: "currency",
-    currency: "USD",
+    currency: "KES",
     maximumFractionDigits: 0,
   }).format(value);
 }
@@ -71,10 +71,29 @@ export const hr = {
     const { data: auth } = await supabase.auth.getUser();
     const user = auth.user;
     if (!user) return null;
-    const [{ data: employee }, { data: roles }] = await Promise.all([
+    const [{ data: employeeByUserId }, { data: roles }] = await Promise.all([
       supabase.from("employees").select("*").eq("user_id", user.id).maybeSingle(),
       supabase.from("user_roles").select("role").eq("user_id", user.id),
     ]);
+
+    let employee = employeeByUserId;
+
+    if (!employee && user.email) {
+      const { data: employeeByEmail } = await supabase
+        .from("employees")
+        .select("*")
+        .eq("email", user.email)
+        .maybeSingle();
+
+      employee = employeeByEmail;
+
+      if (employee && !employee.user_id) {
+        await supabase
+          .from("employees")
+          .update({ user_id: user.id })
+          .eq("id", employee.id);
+      }
+    }
     const roleList = (roles ?? []).map((r) => r.role as string);
     return {
       user,
